@@ -11,8 +11,10 @@ stages:
 
 build_container_image:
   extends: .kaniko_build
+  rules:
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
 
-build_latest_image:
+build_container_latest_image:
   extends: .kaniko_build
   variables:
     CONTAINER_BUILD_DESTINATIONS: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA $CI_REGISTRY_IMAGE:latest
