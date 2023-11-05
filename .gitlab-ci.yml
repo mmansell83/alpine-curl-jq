@@ -1,4 +1,8 @@
 include:
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - project: 'infrastructure/renovate-bot'
+    file: 'renovate-config-validator.gitlab-ci.yml'
+  # General Kaniko items at the moment
   - /.gitlab-ci/kaniko.yml
 
 stages:
@@ -6,3 +10,6 @@ stages:
 
 build_container_image:
   extends: .kaniko_build
+
+# build_release_image:
+#   extends: .kaniko_build_tag
