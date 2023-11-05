@@ -17,13 +17,11 @@
       --dockerfile "${CONTAINER_BUILD_DOCKERFILE}"
       ${KANIKO_CACHE_ARGS} ${KANIKO_BUILD_ARGS}
       $(for DEST in $CONTAINER_BUILD_DESTINATIONS; do echo "--destination $DEST"; done)
-      # --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
 
-.kaniko_build_tag:
-  extends: .kaniko_build
-  script:
-    - /kaniko/executor
-      --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
+# .kaniko_build_tag:
+#   extends: .kaniko_build
+#   variables:
+#     CONTAINER_BUILD_DESTINATIONS: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+#   rules:
+#     - if: $CI_COMMIT_TAG
 
