@@ -1,0 +1,8 @@
+include:
+  - /.gitlab-ci/kaniko.yml
+
+stages:
+ - build
+
+build_container_image:
+  extends: .kaniko_build
