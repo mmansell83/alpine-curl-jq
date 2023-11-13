@@ -1,9 +1,14 @@
 include:
+  # This should enable pipelines to run on default branches and MRs only
+  - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - project: 'infrastructure/renovate-bot'
     file: 'renovate-config-validator.gitlab-ci.yml'
-  # General Kaniko items at the moment
-  - /.gitlab-ci/kaniko.yml
+  # Container Specific pipelines are below
+  - project: 'infrastructure/ci'
+    file: 'templates/kaniko.gitlab-ci.yml'
+  - project: 'infrastructure/ci'
+    file: 'templates/trivy.gitlab-ci.yml'
 
 stages:
  - build
@@ -20,3 +25,10 @@ build_container_latest_image:
     CONTAINER_BUILD_DESTINATIONS: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA $CI_REGISTRY_IMAGE:latest
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+scan_container_image:
+  extends: .trivy_scan
+  # This should run all the time and should always use the $CI_COMMIT_SHORT_SHA variable since `latest` is
+  # just another tag of the same image
+  # rules:
+  #   - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
