@@ -1,6 +1,6 @@
 include:
   # This should enable pipelines to run on default branches and MRs only
-  - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yaml
+  - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - project: 'infrastructure/renovate-bot'
     file: 'renovate-config-validator.gitlab-ci.yml'
