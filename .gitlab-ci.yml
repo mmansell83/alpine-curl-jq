@@ -3,7 +3,7 @@ include:
   - project: 'infrastructure/renovate-bot'
     file: 'renovate-config-validator.gitlab-ci.yml'
   - project: 'infrastructure/ci'
-    file: '.gitlab-ci/kaniko.yaml'
+    file: '.gitlab-ci/kaniko.yml'
   - project: 'infrastructure/ci'
     file: '.gitlab-ci/trivy.yml'
   # # General Kaniko items at the moment
