@@ -2,10 +2,14 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - project: 'infrastructure/renovate-bot'
     file: 'renovate-config-validator.gitlab-ci.yml'
-  # General Kaniko items at the moment
-  - /.gitlab-ci/kaniko.yml
-  # Lets try container scanning
-  - /.gitlab-ci/trivy.yml
+  - project: 'infrastructure/ci'
+    file: '.gitlab-ci/kaniko.yaml'
+  - project: 'infrastructure/ci'
+    file: '.gitlab-ci/trivy.yml'
+  # # General Kaniko items at the moment
+  # - /.gitlab-ci/kaniko.yml
+  # # Lets try container scanning
+  # - /.gitlab-ci/trivy.yml
 
 stages:
  - build
