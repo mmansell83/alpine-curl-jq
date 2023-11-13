@@ -4,6 +4,8 @@ include:
     file: 'renovate-config-validator.gitlab-ci.yml'
   # General Kaniko items at the moment
   - /.gitlab-ci/kaniko.yml
+  # Lets try container scanning
+  - /.gitlab-ci/trivy.yml
 
 stages:
  - build
@@ -20,3 +22,8 @@ build_container_latest_image:
     CONTAINER_BUILD_DESTINATIONS: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA $CI_REGISTRY_IMAGE:latest
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+scan_container_image:
+  extends: .trivy_scan
+  rules:
+    - if $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
