@@ -3,9 +3,9 @@ include:
   - project: 'infrastructure/renovate-bot'
     file: 'renovate-config-validator.gitlab-ci.yml'
   - project: 'infrastructure/ci'
-    file: '.gitlab-ci/kaniko.yml'
+    file: 'templates/kaniko.yml'
   - project: 'infrastructure/ci'
-    file: '.gitlab-ci/trivy.yml'
+    file: 'templates/trivy.yml'
   # # General Kaniko items at the moment
   # - /.gitlab-ci/kaniko.yml
   # # Lets try container scanning
