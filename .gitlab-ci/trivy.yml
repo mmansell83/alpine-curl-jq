@@ -1,7 +1,7 @@
 .trivy_scan:
   stage: test
   image:
-    name: docker.io/aquasec/trivy:0.47.0
+    name: docker.io/aquasec/trivy:0.47.0@sha256:0c772c5bf29a42dd8fcbe8ce80787f9e472668792685a2f967e2185cdb9620ec
     entrypoint: [""]
   variables:
     # the below prevents the clone of this repository for scanning
