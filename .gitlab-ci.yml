@@ -29,5 +29,7 @@ build_container_latest_image:
 
 scan_container_image:
   extends: .trivy_scan
-  rules:
-    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+  # This should run all the time and should always use the $CI_COMMIT_SHORT_SHA variable since `latest` is
+  # just another tag of the same image
+  # rules:
+  #   - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
