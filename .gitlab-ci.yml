@@ -26,4 +26,4 @@ build_container_latest_image:
 scan_container_image:
   extends: .trivy_scan
   rules:
-    - if $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
