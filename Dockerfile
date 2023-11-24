@@ -1,5 +1,7 @@
 FROM alpine:3.18.4
 
+# kubectl exists in edge but not 3.18
+
 RUN apk update && apk upgrade && \
-    apk add jq curl yq helm git crane kustomize kubectl && \
+    apk add jq curl yq helm git crane kustomize && \
     apk cache clean
