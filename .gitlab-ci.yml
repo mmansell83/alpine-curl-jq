@@ -10,6 +10,9 @@ include:
   - project: 'infrastructure/ci'
     file: 'templates/trivy.gitlab-ci.yml'
 
+variables:
+  SLSA_PROVENANCE_SCHEMA_VERSION: v1
+
 stages:
  - build
  - test
