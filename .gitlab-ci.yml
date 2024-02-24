@@ -9,8 +9,7 @@ include:
   #   file: 'templates/kaniko.gitlab-ci.yml'
   - project: 'infrastructure/ci'
     file: 'templates/trivy.gitlab-ci.yml'
-
-  - component: $CI_SERVER_HOST/ci/components/kaniko@1.1.0    
+  - component: $CI_SERVER_HOST/ci/components/kaniko/kaniko@1.1.0
 
 variables:
   SLSA_PROVENANCE_SCHEMA_VERSION: v1
