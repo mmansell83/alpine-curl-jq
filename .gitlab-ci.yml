@@ -4,11 +4,11 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - project: 'infrastructure/renovate-bot'
     file: 'renovate-config-validator.gitlab-ci.yml'
+
   # Container Specific pipelines are below
   - project: 'infrastructure/ci'
-    file: 'templates/kaniko.gitlab-ci.yml'
-  - project: 'infrastructure/ci'
     file: 'templates/trivy.gitlab-ci.yml'
+  - component: $CI_SERVER_HOST/ci/components/kaniko/kaniko@1.1.0
 
 variables:
   SLSA_PROVENANCE_SCHEMA_VERSION: v1
@@ -16,18 +16,6 @@ variables:
 stages:
  - build
  - test
-
-build_container_image:
-  extends: .kaniko_build
-  rules:
-    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-
-build_container_latest_image:
-  extends: .kaniko_build
-  variables:
-    CONTAINER_BUILD_DESTINATIONS: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA $CI_REGISTRY_IMAGE:latest
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 scan_container_image:
   extends: .trivy_scan
