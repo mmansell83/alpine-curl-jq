@@ -6,9 +6,10 @@ include:
     file: 'renovate-config-validator.gitlab-ci.yml'
 
   # Container Specific pipelines are below
-  - project: 'infrastructure/ci'
-    file: 'templates/trivy.gitlab-ci.yml'
+  # - project: 'infrastructure/ci'
+  #   file: 'templates/trivy.gitlab-ci.yml'
   - component: $CI_SERVER_HOST/ci/components/kaniko/kaniko@1.1.0
+  - component: $CI_SERVER_HOST/ci/components/trivy/container@1.0.0
 
 variables:
   SLSA_PROVENANCE_SCHEMA_VERSION: v1
@@ -17,9 +18,9 @@ stages:
  - build
  - test
 
-scan_container_image:
-  extends: .trivy_scan
-  # This should run all the time and should always use the $CI_COMMIT_SHORT_SHA variable since `latest` is
-  # just another tag of the same image
-  # rules:
-  #   - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+# scan_container_image:
+#   extends: .trivy_scan
+#   # This should run all the time and should always use the $CI_COMMIT_SHORT_SHA variable since `latest` is
+#   # just another tag of the same image
+#   # rules:
+#   #   - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
