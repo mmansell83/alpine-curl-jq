@@ -3,9 +3,12 @@
   "extends": [
     "config:recommended"
   ],
-  "gitlab-tags": {
-    "registryUrl": "https://gitlab.stolenleadsmen.com"
-  },
+  "packageRules": [
+    {
+      "datasources": ["gitlab-tags"],
+      "registryUrls": ["https://gitlab.stolenleadsmen.com"]
+    }
+  ],
   "prCreation": "immediate",
   "labels": ["renovate"]
 }

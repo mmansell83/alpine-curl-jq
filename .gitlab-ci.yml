@@ -4,6 +4,10 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - project: 'infrastructure/renovate-bot'
     file: 'renovate-config-validator.gitlab-ci.yml'
+    rules:
+      - changes:
+        - renovate.json
+        - .gitlab/renovate.json
 
   # Container Specific pipelines are below
   # - project: 'infrastructure/ci'
