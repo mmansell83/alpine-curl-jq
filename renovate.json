@@ -2,5 +2,13 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>infrastructure/renovate-bot//presets/containers"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["gitlabci-include", "gitlabci"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "automergeType": "branch",
+      "automerge": true
+    }
   ]
 }
