@@ -12,7 +12,7 @@ include:
   # Container Specific pipelines are below
   # - project: 'infrastructure/ci'
   #   file: 'templates/trivy.gitlab-ci.yml'
-  - component: $CI_SERVER_HOST/ci/components/kaniko/kaniko@1.2.2
+  - component: $CI_SERVER_HOST/ci/components/kaniko/kaniko@1.2.3
   - component: $CI_SERVER_HOST/ci/components/trivy/container@1.0.5
 
 variables:
