@@ -13,7 +13,7 @@ include:
   # - project: 'infrastructure/ci'
   #   file: 'templates/trivy.gitlab-ci.yml'
   - component: $CI_SERVER_HOST/ci/components/kaniko/kaniko@v1.3.4
-  - component: $CI_SERVER_HOST/ci/components/trivy/container@v1.2.4
+  - component: $CI_SERVER_HOST/ci/components/trivy/container@v1.2.7
 
 variables:
   SLSA_PROVENANCE_SCHEMA_VERSION: v1
