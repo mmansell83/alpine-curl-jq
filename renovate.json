@@ -6,7 +6,7 @@
   "packageRules": [
     {
       "matchManagers": ["gitlabci-include", "gitlabci"],
-      "matchUpdateTypes": ["patch", "minor"],
+      "matchUpdateTypes": ["patch", "minor", "digest"],
       "automergeType": "branch",
       "automerge": true
     }
