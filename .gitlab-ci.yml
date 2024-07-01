@@ -17,7 +17,7 @@ include:
       dockerhub_enable: "true"
       dockerhub_enable_short_sha: "true"
 
-  - component: $CI_SERVER_HOST/ci/components/trivy/container@v1.2.7
+  - component: $CI_SERVER_HOST/ci/components/trivy/container@v1.2.8
 
 variables:
   SLSA_PROVENANCE_SCHEMA_VERSION: v1
