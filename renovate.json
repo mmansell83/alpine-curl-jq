@@ -1,7 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "configMigration": true,
   "extends": [
-    "local>infrastructure/renovate-bot//presets/containers"
+    "config:recommended",
+    ":semanticCommits",
+    "docker:pinDigests"
   ],
   "packageRules": [
     {
