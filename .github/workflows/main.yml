@@ -2,7 +2,7 @@ name: ci
 
 on:
   schedule:
-    - cron: "0 10 * * *"
+    - cron: "24 3 * * 0"
   push:
     branches:
       - "**"
@@ -21,8 +21,8 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            mmansell/alpine-curl-jq
-            ghcr.io/mmansell/alpine-curl-jq
+            mmansell83/alpine-curl-jq
+            ghcr.io/mmansell83/alpine-curl-jq
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
