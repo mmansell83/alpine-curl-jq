@@ -29,6 +29,7 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=sha,prefix=,suffix=,format=short
+            type=sha
             type=raw,value=latest,enable={{is_default_branch}}
           # tags: |
           #   type=schedule
@@ -82,8 +83,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          # image-ref: 'ghcr.io/mmansell83/alpine-curl-jq:${{ steps.meta.outputs.tags }}'
-          image-ref: ${{ steps.meta.outputs.tags['type=sha,prefix=,suffix=,format=short'] }}
+          image-ref: 'ghcr.io/mmansell83/alpine-curl-jq:${{ github.sha }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
