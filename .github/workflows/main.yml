@@ -81,7 +81,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           image-ref: 'ghcr.io/mmansell83/alpine-curl-jq:${{ github.sha }}'
           format: 'table'
