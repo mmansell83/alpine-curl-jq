@@ -43,7 +43,7 @@ jobs:
           #   type=raw,value=latest,enable={{is_default_branch}}
       
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
