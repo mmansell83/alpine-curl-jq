@@ -1,3 +1,7 @@
+# Keep CI artifacts (including the Trivy DB cache) out of the build context
+.git
+.cache
 .github
 .gitlab-ci.yml*
 renovate.json
+trivy-results.*
