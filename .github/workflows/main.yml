@@ -14,7 +14,17 @@ jobs:
   container-build-and-publish:
     runs-on: ubuntu-latest
     # environment: production
+    permissions:
+      contents: read
+      packages: write
+      # Upload Trivy results to GitHub code scanning
+      security-events: write
+    env:
+      TEST_IMAGE: alpine-curl-jq:ci
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v6
@@ -29,7 +39,6 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=sha,prefix=,suffix=,format=short
-            type=sha,prefix=,suffix=,format=long
             type=raw,value=latest,enable={{is_default_branch}}
           # tags: |
           #   type=schedule
@@ -41,7 +50,7 @@ jobs:
           #   type=sha,prefix=,suffix=,format=short
           #   type=edge,branch=main
           #   type=raw,value=latest,enable={{is_default_branch}}
-      
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
 
@@ -50,6 +59,78 @@ jobs:
       # https://github.com/docker/setup-buildx-action
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
+
+      # Build a single-platform image into the local Docker daemon so it can
+      # be tested and scanned before anything is pushed
+      - name: Build test image
+        id: build-test
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          load: true
+          tags: ${{ env.TEST_IMAGE }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Check that every bundled tool is installed and runs
+      - name: Smoke test
+        run: |
+          docker run --rm "$TEST_IMAGE" sh -euxc '
+            jq --version
+            curl --version
+            yq --version
+            helm version
+            git --version
+            crane version
+            kustomize version
+            kubectl version --client
+          '
+
+      # Scan the test image. Findings are reported, not enforced here:
+      # code scanning flags new alerts on pull requests, and scheduled
+      # rebuilds still publish OS package fixes when older findings remain.
+      # https://github.com/aquasecurity/trivy-action
+      - name: Trivy scan (SARIF)
+        if: ${{ !cancelled() && steps.build-test.outcome == 'success' }}
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: ${{ env.TEST_IMAGE }}
+          scanners: vuln
+          format: sarif
+          output: trivy-results.sarif
+          exit-code: '0'
+
+      - name: Trivy scan (job summary)
+        if: ${{ !cancelled() && steps.build-test.outcome == 'success' }}
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: ${{ env.TEST_IMAGE }}
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          format: table
+          output: trivy-results.txt
+          exit-code: '0'
+          skip-setup-trivy: true
+
+      - name: Add Trivy results to job summary
+        if: ${{ !cancelled() && steps.build-test.outcome == 'success' }}
+        run: |
+          {
+            echo "## Trivy scan (HIGH, CRITICAL)"
+            echo '```'
+            cat trivy-results.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload Trivy results to code scanning
+        if: ${{ !cancelled() && steps.build-test.outcome == 'success' }}
+        uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy-container
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
@@ -75,17 +156,11 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
+          context: .
           # platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/riscv64
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          image-ref: 'ghcr.io/mmansell83/alpine-curl-jq:${{ github.sha }}'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
